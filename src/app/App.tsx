@@ -1,4 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
+
+// ─── Facebook CAPI (Server-Side) ─────────────────────────────────────────────
+async function sendCAPIEvent(event_name: string) {
+  try {
+    await fetch('/api/fb-event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event_name,
+        event_source_url: window.location.href,
+        client_user_agent: navigator.userAgent,
+      }),
+    });
+  } catch (e) {
+    // CAPI failure should not break the page
+    console.warn('CAPI error:', e);
+  }
+}
 import coverImg from 'figma:asset/ChatGPT_Image_2_Mei_2026,_11.50.51.png';
 
 // ─── Facebook Pixel ──────────────────────────────────────────────────────────
@@ -33,12 +51,16 @@ function initFacebookPixels() {
   document.head.appendChild(s);
   PIXEL_IDS.forEach(id => window.fbq('init', id));
   window.fbq('track', 'PageView');
+  // 🔥 CAPI: PageView (server-side, for pixel 520138225624460)
+  sendCAPIEvent('PageView');
 }
 
 function trackAddToCart() {
   if (typeof window.fbq === 'function') {
     window.fbq('track', 'AddToCart');
   }
+  // 🔥 CAPI: AddToCart (server-side, for pixel 520138225624460)
+  sendCAPIEvent('AddToCart');
 }
 
 function goToCheckout() {
@@ -231,7 +253,7 @@ function HeroSection({ onCTA }: { onCTA: () => void }) {
         {/* Trust */}
         <div style={{ ...dmSans, display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center', fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 12 }}>
           <span style={{ color: C.gold }}>★★★★★</span>
-          500+ Pemilik UMKM Sudah Temukan Kebocoran Bisnis Mereka
+          Puluhan Bisnis Sudah Temukan Kebocoran Mereka
         </div>
       </div>
     </section>
@@ -252,7 +274,7 @@ function ProofBar() {
       lineHeight: 1.6,
       width: '100%',
     }}>
-      🩺 <strong>500+ pemilik UMKM</strong> sudah diagnosa bisnis mereka pakai framework ini — dan berhasil menutup kebocoran yang selama ini bikin uang menguap tanpa jejak
+      🩺 <strong>Puluhan bisnis</strong> sudah didiagnosa pakai framework ini — dan berhasil menutup kebocoran yang selama ini bikin uang menguap tanpa jejak
     </div>
   );
 }
@@ -265,6 +287,7 @@ const problems = [
   { icon: '📉', title: 'Cash Flow Minus di Akhir Bulan', desc: 'Uang masuk dan keluar nggak balance. Bayar supplier, gaji karyawan — eh rekening sudah kosong lagi.' },
   { icon: '😰', title: 'Makin Ramai, Makin Pusing', desc: 'Bukannya makin untung, makin banyak order malah makin banyak masalah dan pengeluaran tak terduga.' },
   { icon: '❓', title: 'Nggak Tahu Kapan Bisa Balik Modal', desc: 'Sudah berbulan-bulan jualan tapi nggak ada kepastian. Bisnis jalan, tapi kamu nggak tahu ke mana arahnya.' },
+  { icon: '🔄', title: 'Bisnis Jalan Ditempat', desc: 'Bingung apa yang harus dibenerin.' },
 ];
 
 function ProblemSection() {
@@ -462,7 +485,7 @@ function ContentPreviewSection() {
       <div style={{ textAlign: 'center', marginBottom: 32 }}>
         <Tag center>Sneak Peek Isi</Tag>
         <h2 style={{ ...playfair, fontSize: 'clamp(22px,5.5vw,34px)', fontWeight: 700, color: C.navy, lineHeight: 1.25 }}>
-          Ini Bukan Ebook Biasa —<br /><em style={{ color: C.gold, fontStyle: 'normal' }}>Lihat Kualitas Isinya</em>
+          Ini Bukan Ilmu Biasa —<br /><em style={{ color: C.gold, fontStyle: 'normal' }}>Lihat Kualitas Isinya</em>
         </h2>
         <p style={{ ...dmSans, fontSize: 14, color: C.textMid, lineHeight: 1.7, maxWidth: 560, margin: '10px auto 0' }}>
           Setiap halaman dirancang untuk langsung bisa dieksekusi — bukan sekadar dibaca dan dilupakan.
@@ -496,16 +519,16 @@ function ContentPreviewSection() {
 
 // ─── SECTION 5: Social Proof ─────────────────────────────────────────────────
 const proofNums = [
-  { num: '500+', label: 'Pemilik UMKM\nTemukan Kebocoran' },
+  { num: 'Puluhan', label: 'Bisnis Berhasil\nDidiagnosa' },
   { num: '87%', label: 'Menemukan Masalah\ndi Hari Pertama' },
   { num: '3x', label: 'Rata-rata Peningkatan\nProfit dalam 90 Hari' },
 ];
 
 const testimonials = [
-  { star: 5, quote: 'Ternyata selama ini aku jual rugi karena salah hitung HPP! Setelah pakai SBAF, omzet sama tapi profit bersih naik 3x lipat!', name: 'Budi Santoso', role: 'Pemilik Warung Makan, Jakarta' },
-  { star: 5, quote: 'Bisnis rame tapi uang habis terus — ternyata ada kebocoran di biaya operasional yang nggak pernah aku sadari. Sekarang cash flow sudah positif tiap bulan!', name: 'Siti Rahma', role: 'Owner Toko Online Fashion, Surabaya' },
-  { star: 5, quote: 'Jualan tiap hari tapi rekening tipis terus. Pakai SBAF baru sadar margin produkku minus. Langsung aku perbaiki dan sekarang benar-benar untung!', name: 'Ahmad Rizki', role: 'Pemilik Katering, Bandung' },
-  { star: 5, quote: 'Akhirnya tahu persis di mana uang bisnisku bocor. Dari rugi tiap bulan, sekarang profit bersih naik 150% dalam 4 bulan pertama.', name: 'Dewi Kusuma', role: 'Owner Salon & Beauty, Yogyakarta' },
+  { star: 5, quote: 'Ternyata selama ini aku jual rugi karena salah hitung HPP! Setelah pakai SBAF, omzet sama tapi profit bersih naik 3x lipat!', name: 'Pak Noe', role: 'Owner Cafe dan Rumah Makan' },
+  { star: 5, quote: 'Bisnis rame tapi uang habis terus — ternyata ada kebocoran di biaya operasional yang nggak pernah aku sadari. Sekarang cash flow sudah positif tiap bulan!', name: 'Pak Ahmad', role: 'Owner Bisnis Jasa' },
+  { star: 5, quote: 'Jualan tiap hari tapi rekening tipis terus. Pakai SBAF baru sadar margin produkku minus. Langsung aku perbaiki dan sekarang benar-benar untung!', name: 'Pak Udin', role: 'Owner Digital Agency' },
+  { star: 5, quote: 'Akhirnya tahu persis di mana uang bisnisku bocor. Dari rugi tiap bulan, sekarang profit bersih naik 150% dalam 4 bulan pertama.', name: 'Bu Dewi Kumala', role: 'Owner Oseng Mercon' },
 ];
 
 function ProofSection() {
@@ -704,12 +727,13 @@ function BonusSection() {
 
 // ─── SECTION 7: Offer + Countdown ────────────────────────────────────────────
 function CountdownTimer() {
-  const [time, setTime] = useState({ h: 23, m: 47, s: 30 });
+  const [time, setTime] = useState({ h: 0, m: 39, s: 0 });
 
   useEffect(() => {
     const id = setInterval(() => {
       setTime(prev => {
         let { h, m, s } = prev;
+        if (h === 0 && m === 0 && s === 0) return prev; // Stop at 0
         if (s > 0) s--;
         else { s = 59; if (m > 0) m--; else { m = 59; if (h > 0) h--; } }
         return { h, m, s };
@@ -721,23 +745,36 @@ function CountdownTimer() {
   const pad = (n: number) => String(n).padStart(2, '0');
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
-      {[{ n: time.h, l: 'JAM' }, { n: time.m, l: 'MENIT' }, { n: time.s, l: 'DETIK' }].map(({ n, l }, i) => (
-        <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            background: 'rgba(255,255,255,0.05)',
-            border: `1px solid rgba(201,168,76,0.25)`,
-            borderRadius: 8,
-            padding: '10px 14px',
-            textAlign: 'center',
-            minWidth: 58,
-          }}>
-            <span style={{ ...playfair, fontSize: 28, fontWeight: 900, color: C.gold, lineHeight: 1, display: 'block' }}>{pad(n)}</span>
-            <span style={{ ...dmSans, fontSize: 9, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 2, display: 'block' }}>{l}</span>
+    <div style={{
+      background: 'rgba(229, 62, 62, 0.08)',
+      border: `2px dashed ${C.red}`,
+      borderRadius: 12,
+      padding: '20px',
+      marginBottom: 24,
+      textAlign: 'center',
+      boxShadow: '0 0 24px rgba(229, 62, 62, 0.15)'
+    }}>
+      <div style={{ ...dmSans, fontSize: 13, fontWeight: 800, color: C.red, marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        ⚠️ Peringatan: Penawaran Spesial Berakhir Dalam
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
+        {[{ n: time.h, l: 'JAM' }, { n: time.m, l: 'MENIT' }, { n: time.s, l: 'DETIK' }].map(({ n, l }, i) => (
+          <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              background: 'rgba(229, 62, 62, 0.15)',
+              border: `1px solid rgba(229, 62, 62, 0.5)`,
+              borderRadius: 8,
+              padding: '10px 14px',
+              textAlign: 'center',
+              minWidth: 58,
+            }}>
+              <span style={{ ...playfair, fontSize: 32, fontWeight: 900, color: C.red, lineHeight: 1, display: 'block' }}>{pad(n)}</span>
+              <span style={{ ...dmSans, fontSize: 9, color: 'rgba(229, 62, 62, 0.8)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 4, display: 'block', fontWeight: 700 }}>{l}</span>
+            </div>
+            {i < 2 && <span style={{ ...playfair, color: C.red, fontSize: 24, fontWeight: 900 }}>:</span>}
           </div>
-          {i < 2 && <span style={{ ...playfair, color: C.gold, fontSize: 22, fontWeight: 900 }}>:</span>}
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -1033,21 +1070,21 @@ function Footer() {
 
 // ─── Purchase Popup ──────────────────────────────────────────────────────────
 const buyers = [
-  { name: 'Anton S., Jakarta', time: '2 menit lalu' },
-  { name: 'Januar Tejasusilo, Surabaya', time: '4 menit lalu' },
-  { name: 'Adnan Nur Hidayat, Bandung', time: '6 menit lalu' },
-  { name: 'Wahyono, Semarang', time: '8 menit lalu' },
-  { name: 'Irfan Hidayat, Medan', time: '10 menit lalu' },
-  { name: 'Nurdin Zuhri, Makassar', time: '12 menit lalu' },
-  { name: 'Nurhidayati, Yogyakarta', time: '14 menit lalu' },
-  { name: 'Aji Buono, Bogor', time: '16 menit lalu' },
-  { name: 'Tere, Depok', time: '18 menit lalu' },
-  { name: 'Miftahul Huda, Malang', time: '20 menit lalu' },
-  { name: 'Fendy Helfi, Palembang', time: '22 menit lalu' },
-  { name: 'Dody Suryadikjaya, Tangerang', time: '24 menit lalu' },
-  { name: 'Sugihantara, Solo', time: '26 menit lalu' },
-  { name: 'Bagus Putu Fabio, Bali', time: '28 menit lalu' },
-  { name: 'Rudi Kurniawan Arief, Bekasi', time: '30 menit lalu' },
+  { name: 'Anton S.' },
+  { name: 'Januar Tejasusilo' },
+  { name: 'Adnan Nur Hidayat' },
+  { name: 'Wahyono' },
+  { name: 'Irfan Hidayat' },
+  { name: 'Nurdin Zuhri' },
+  { name: 'Nurhidayati' },
+  { name: 'Aji Buono' },
+  { name: 'Tere' },
+  { name: 'Miftahul Huda' },
+  { name: 'Fendy Helfi' },
+  { name: 'Dody Suryadikjaya' },
+  { name: 'Sugihantara' },
+  { name: 'Bagus Putu Fabio' },
+  { name: 'Rudi Kurniawan Arief' },
 ];
 
 function PurchasePopup() {
@@ -1098,8 +1135,7 @@ function PurchasePopup() {
       }}>🎉</div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ ...dmSans, fontSize: 12, fontWeight: 700, color: C.textDark, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{buyers[idx].name}</div>
-        <div style={{ ...dmSans, fontSize: 11, color: C.textMid, marginTop: 1, lineHeight: 1.4 }}>baru saja membeli SMART BUSINESS AUTOPSY FRAMEWORK</div>
-        <div style={{ ...dmSans, fontSize: 10, color: 'rgba(0,0,0,0.3)', marginTop: 2 }}>{buyers[idx].time}</div>
+        <div style={{ ...dmSans, fontSize: 11, color: C.textMid, marginTop: 1, lineHeight: 1.4 }}>Telah membeli Smart Business Autopsy Framework</div>
       </div>
     </div>
   );
