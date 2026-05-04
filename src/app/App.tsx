@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 
 // ─── Facebook CAPI (Server-Side) ─────────────────────────────────────────────
-async function sendCAPIEvent(event_name: string) {
+async function sendCAPIEvent(event_name: string, event_id: string) {
   try {
     await fetch('/api/fb-event', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         event_name,
+        event_id,
         event_source_url: window.location.href,
         client_user_agent: navigator.userAgent,
       }),
@@ -49,18 +50,21 @@ function initFacebookPixels() {
   const s = document.createElement('script');
   s.innerHTML = `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');`;
   document.head.appendChild(s);
+
+  const eventId = 'pv_' + Date.now();
   PIXEL_IDS.forEach(id => window.fbq('init', id));
-  window.fbq('track', 'PageView');
+  window.fbq('track', 'PageView', {}, { eventID: eventId });
   // 🔥 CAPI: PageView (server-side, for pixel 520138225624460)
-  sendCAPIEvent('PageView');
+  sendCAPIEvent('PageView', eventId);
 }
 
 function trackAddToCart() {
+  const eventId = 'atc_' + Date.now();
   if (typeof window.fbq === 'function') {
-    window.fbq('track', 'AddToCart');
+    window.fbq('track', 'AddToCart', {}, { eventID: eventId });
   }
   // 🔥 CAPI: AddToCart (server-side, for pixel 520138225624460)
-  sendCAPIEvent('AddToCart');
+  sendCAPIEvent('AddToCart', eventId);
 }
 
 function goToCheckout() {

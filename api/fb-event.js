@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { event_name, event_source_url, client_user_agent, client_ip_address } = req.body;
+    const { event_name, event_source_url, client_user_agent, client_ip_address, event_id } = req.body;
 
     if (!event_name) {
       return res.status(400).json({ error: 'event_name is required' });
@@ -28,6 +28,7 @@ export default async function handler(req, res) {
         {
           event_name,
           event_time: Math.floor(Date.now() / 1000),
+          event_id: event_id, // For deduplication
           action_source: 'website',
           event_source_url: event_source_url || 'https://landing-page-ebook-figma.vercel.app',
           client_user_agent: client_user_agent || req.headers['user-agent'] || '',
