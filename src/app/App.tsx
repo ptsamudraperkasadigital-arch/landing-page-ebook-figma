@@ -206,14 +206,16 @@ function HeroSection({ onCTA }: { onCTA: () => void }) {
         {/* H1 */}
         <h1 style={{
           ...playfair,
-          fontSize: 'clamp(28px,7vw,48px)',
+          fontSize: 'clamp(28px,7vw,42px)',
           fontWeight: 900,
-          lineHeight: 1.15,
+          lineHeight: 1.2,
           color: '#fff',
           marginBottom: 14,
         }}>
-          Jualan Tiap Hari,<br />
-          <em style={{ color: C.gold, fontStyle: 'normal' }}>Tapi Kok Uangnya Gak Nambah-Nambah?</em>
+          Setelah Gue Baca SBAF 3 Hari,<br />
+          Gue Akhirnya Ngerti Kenapa Bisnis Gue Jalan di Tempat —<br />
+          <em style={{ color: C.gold, fontStyle: 'normal' }}>Sekarang Omzet Naik, Profit Tebel,<br />
+          Pelanggan Beli Berkali-kali Tanpa Dipaksa.</em>
         </h1>
 
         {/* Sub */}
