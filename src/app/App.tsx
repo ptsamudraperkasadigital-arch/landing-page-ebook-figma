@@ -285,13 +285,12 @@ function ProofBar() {
 
 // ─── SECTION 2: Problem ──────────────────────────────────────────────────────
 const problems = [
-  { icon: '💸', title: 'Omzet Ada, Profit Entah Ke Mana', desc: 'Penjualan terlihat lumayan, tapi di akhir bulan uang habis begitu saja. Nggak tahu kemana perginya.' },
-  { icon: '🕳️', title: 'Bisnis Bocor Tapi Nggak Kelihatan', desc: 'Ada yang salah di bisnismu, tapi kamu nggak bisa tunjuk jarinya. Semuanya terasa normal, padahal tidak.' },
-  { icon: '🏷️', title: 'Harga Jual Nggak Pernah Tepat', desc: 'Takut kemahalan, tapi kalau murah malah rugi. HPP nggak pernah dihitung dengan benar selama ini.' },
-  { icon: '📉', title: 'Cash Flow Minus di Akhir Bulan', desc: 'Uang masuk dan keluar nggak balance. Bayar supplier, gaji karyawan — eh rekening sudah kosong lagi.' },
-  { icon: '😰', title: 'Makin Ramai, Makin Pusing', desc: 'Bukannya makin untung, makin banyak order malah makin banyak masalah dan pengeluaran tak terduga.' },
-  { icon: '❓', title: 'Nggak Tahu Kapan Bisa Balik Modal', desc: 'Sudah berbulan-bulan jualan tapi nggak ada kepastian. Bisnis jalan, tapi kamu nggak tahu ke mana arahnya.' },
-  { icon: '🔄', title: 'Bisnis Jalan Ditempat', desc: 'Bingung apa yang harus dibenerin.' },
+  { icon: '📉', title: 'Omzet Stagnan & Cenderung Drop', desc: 'Penjualan cenderung menurun karena banyak faktor yang tidak teridentifikasi dengan jelas.' },
+  { icon: '💸', title: 'Omzet Gede, Profit Tipis', desc: 'Bocor sana sini. Uang masuk banyak tapi yang tersisa di rekening sangat sedikit.' },
+  { icon: '🏃‍♂️', title: 'Beli Sekali, Habis Itu Kabur', desc: 'Customer retention rendah. Tidak ada repeat order yang membuat bisnis sulit untuk tumbuh stabil.' },
+  { icon: '🔄', title: 'Pelanggan Gampang Pindah', desc: 'Mudah kehilangan pelanggan ke kompetitor karena tidak memiliki pondasi bisnis yang kuat.' },
+  { icon: '😰', title: 'Kalang Kabut Liat Kompetitor', desc: 'Melihat kompetitor maju lebih cepat membuat panik karena kamu tidak tahu apa yang salah.' },
+  { icon: '🤒', title: 'Owner Sakit, Bisnis Ikut Sakit', desc: 'Bisnis terlalu bergantung padamu. Jika kamu tidak ada, semua operasional langsung berantakan.' },
 ];
 
 function ProblemSection() {
